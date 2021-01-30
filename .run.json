@@ -1,0 +1,4 @@
+{
+  "setup": "",
+  "run": "&& serve -s . -l $PORT"
+}
