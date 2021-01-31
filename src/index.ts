@@ -98,7 +98,7 @@ function setup() {
       "Press space to disable raycast\n" +
       "When raycast is on use mouse button to delete walls\n" +
       "When raycast is off use mouse button to create walls\n" +
-      "Press t to toggle between line and box tool\n"+
+      "Press t to toggle between line and box tool\n" +
       "Use the scroll wheel to increase or decrease raycast amount"
     )
     localStorage.setItem('help_shown1', "true");
@@ -109,8 +109,22 @@ function setup() {
   walls.push(new LineMeta(30 + 1, 30, + 30, height - 30))
   walls.push(new LineMeta(30, height - 30, width - 30, height - 30 - 5))
   walls.push(new LineMeta(width + 1 - 30, 0 + 30, width - 30, height - 30))
-  for (let i = 0; i < 15; i++) {
-    walls.push(new LineMeta(random(0, width), random(0, width), random(0, height), random(0, height),))
+  if (Math.random() > .6) {
+    for (let i = 0; i < random(5, 15); i++) {
+      walls.push(new LineMeta(random(0, width), random(0, width), random(0, height), random(0, height),))
+    }
+  } else {
+    let slash_size = random(80, 100)
+    strokeWeight(random(1, 3))
+    stroke(255, 255, 255)
+    for (let w = 0; w < windowWidth; w += slash_size) {
+      for (let h = 0; h < windowWidth; h += slash_size) {
+        if (Math.random() > random(0.5, 0.9))
+          walls.push(new LineMeta(w, h, w + slash_size, h + slash_size));
+        else
+          walls.push(new LineMeta(w, h + slash_size, w + slash_size, h));
+      }
+    }
   }
 }
 
