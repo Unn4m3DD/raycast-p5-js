@@ -2752,7 +2752,7 @@ declare var keyCode: number;
  *   false" to the end of the method.
  *
  */
-declare function keyPressed(): void;
+declare function keyPressed(key: any): void;
 
 /**
  *   The keyReleased() function is called once every 
@@ -3000,7 +3000,7 @@ declare function doubleClicked(): void;
  *   "return false" is included while using Safari.
  *
  */
-declare function mouseWheel(): void;
+declare function mouseWheel(event: any): void;
 
 // src/events/touch.js
 

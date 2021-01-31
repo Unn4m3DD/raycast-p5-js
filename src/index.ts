@@ -1,4 +1,4 @@
-/// <reference path="./p5.d/p5.global-mode.d.ts" />
+/// <reference path="../p5.d/p5.global-mode.d.ts" />
 class LineMeta {
   min_x: number;
   max_x: number;
@@ -52,13 +52,30 @@ class LineMeta {
   }
 }
 class Focus {
-  res = 362;
   position: p5.Vector;
   constructor(x, y) {
     this.position = createVector(x, y);
   }
+
+  delete(walls: LineMeta[]) {
+    for (let a = 0; a < 360; a += 360 / 8) {
+      let line_end = p5.Vector.mult(p5.Vector.fromAngle(radians(a)), delete_radius);
+      let ray_cast = new LineMeta(this.position.x, this.position.y, line_end.x + this.position.x, line_end.y + this.position.y)
+      let to_delete: number[] = [];
+      for (let i = 0; i < walls.length; i++) {
+        if (ray_cast.intersect(walls[i])) {
+          to_delete.push(i);
+        }
+      }
+      to_delete.filter((a, b) => to_delete.indexOf(a) === b)
+      for (let i of to_delete.reverse()) {
+        walls.splice(i, 1);
+      }
+    }
+  }
+
   render(walls: LineMeta[]) {
-    for (let a = 0; a < 360; a += 360 / this.res) {
+    for (let a = 0; a < 360; a += 360 / resolution) {
       let line_end = p5.Vector.mult(p5.Vector.fromAngle(radians(a)), max_length);
       let ray_cast = new LineMeta(this.position.x, this.position.y, line_end.x + this.position.x, line_end.y + this.position.y)
       //line(this.position.x, this.position.y, line_end.x + this.position.x, line_end.y + this.position.y)
@@ -71,8 +88,17 @@ let max_length: number;
 
 let current_focus: Focus;
 let walls: LineMeta[] = [];
-
+let resolution = 362;
+let step = 15;
+let delete_radius = 15;
 function setup() {
+  if (document.cookie == "") {
+    alert("Welcome to RayCast!\n" +
+      "Press space to disable raycast\n" +
+      "When raycast is on use mouse button to delete walls\n" +
+      "When raycast is off use mouse button to create walls"
+    )
+  }
   createCanvas(windowWidth * .99, windowHeight * .98);
   max_length = Math.sqrt(width * width + height * height);
   walls.push(new LineMeta(30, 30, width - 30, 30 + 5))
@@ -84,11 +110,43 @@ function setup() {
   }
 }
 
+let drawing = true;
+function keyPressed(key): void {
+  if (key.code == "Space")
+    drawing = !drawing;
+
+
+}
+let new_wall_x1: number | null = null;
+let new_wall_y1: number | null = null;
+//@ts-ignore
+function mouseClicked() {
+  if (!drawing)
+    if (new_wall_x1 == null || new_wall_y1 == null) {
+      new_wall_x1 = mouseX;
+      new_wall_y1 = mouseY;
+    } else {
+      walls.push(new LineMeta(new_wall_x1, new_wall_y1, mouseX, mouseY))
+      new_wall_x1 = null;
+      new_wall_y1 = null;
+    }
+  else
+    current_focus.delete(walls);
+}
+function mouseWheel(event): void {
+  resolution += -1 * Math.sign(event.delta) * step
+  if (resolution < 7) resolution = 7;
+}
+
 function draw(): void {
   background(0);
-  if (0 < mouseX && mouseX < width && 0 < mouseY && mouseY < height) {
+  if (drawing && 0 < mouseX && mouseX < width && 0 < mouseY && mouseY < height) {
     current_focus = new Focus(mouseX, mouseY);
     current_focus.render(walls);
+  } else {
+    if (new_wall_x1 != null && new_wall_y1 != null) {
+      line(new_wall_x1, new_wall_y1, mouseX, mouseY)
+    }
   }
   stroke(255, 255, 255, 150)
   for (let wall of walls) {

@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "rootDir": "src/",
+    "outDir": "build/",
+    "watch": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
