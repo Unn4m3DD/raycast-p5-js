@@ -76,12 +76,14 @@ let walls = [];
 let resolution = 362;
 let step = 15;
 let delete_radius = 15;
+let current_shape = "ldne";
 function setup() {
     if (localStorage.getItem("help_shown") != "true") {
         alert("Welcome to RayCast!\n" +
             "Press space to disable raycast\n" +
             "When raycast is on use mouse button to delete walls\n" +
             "When raycast is off use mouse button to create walls\n" +
+            "Press t to toggle between line and box tool\n" +
             "Use the scroll wheel to increase or decrease raycast amount");
         localStorage.setItem('help_shown', "true");
     }
@@ -99,6 +101,8 @@ let drawing = true;
 function keyPressed(key) {
     if (key.code == "Space")
         drawing = !drawing;
+    if (key.code == "KeyT")
+        current_shape = current_shape == "line" ? "square" : "line";
 }
 let new_wall_x1 = null;
 let new_wall_y1 = null;
@@ -110,7 +114,14 @@ function mouseClicked() {
             new_wall_y1 = mouseY;
         }
         else {
-            walls.push(new LineMeta(new_wall_x1, new_wall_y1, mouseX, mouseY));
+            if (current_shape == "line")
+                walls.push(new LineMeta(new_wall_x1, new_wall_y1, mouseX, mouseY));
+            else {
+                walls.push(new LineMeta(new_wall_x1, new_wall_y1 + 3, mouseX, new_wall_y1));
+                walls.push(new LineMeta(new_wall_x1 + 3, new_wall_y1, new_wall_x1, mouseY));
+                walls.push(new LineMeta(mouseX - 3, new_wall_y1, mouseX, mouseY));
+                walls.push(new LineMeta(new_wall_x1, mouseY - 3, mouseX, mouseY));
+            }
             new_wall_x1 = null;
             new_wall_y1 = null;
         }
@@ -130,7 +141,14 @@ function draw() {
     }
     else {
         if (new_wall_x1 != null && new_wall_y1 != null) {
-            line(new_wall_x1, new_wall_y1, mouseX, mouseY);
+            if (current_shape == "line")
+                line(new_wall_x1, new_wall_y1, mouseX, mouseY);
+            else {
+                line(new_wall_x1, new_wall_y1 + 3, mouseX, new_wall_y1);
+                line(new_wall_x1 + 3, new_wall_y1, new_wall_x1, mouseY);
+                line(mouseX - 3, new_wall_y1, mouseX, mouseY);
+                line(new_wall_x1, mouseY - 3, mouseX, mouseY);
+            }
         }
     }
     stroke(255, 255, 255, 150);
