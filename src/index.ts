@@ -93,7 +93,7 @@ let step = 15;
 let delete_radius = 15;
 let current_shape = "ldne"
 function setup() {
-  if (localStorage.getItem("help_shown") != "true") {
+  if (localStorage.getItem("help_shown1") != "true") {
     alert("Welcome to RayCast!\n" +
       "Press space to disable raycast\n" +
       "When raycast is on use mouse button to delete walls\n" +
@@ -101,7 +101,7 @@ function setup() {
       "Press t to toggle between line and box tool\n"+
       "Use the scroll wheel to increase or decrease raycast amount"
     )
-    localStorage.setItem('help_shown', "true");
+    localStorage.setItem('help_shown1', "true");
   }
   createCanvas(windowWidth * .99, windowHeight * .98);
   max_length = Math.sqrt(width * width + height * height);
