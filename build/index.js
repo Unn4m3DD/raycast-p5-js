@@ -83,6 +83,7 @@ function setup() {
             "When raycast is on use mouse button to delete walls\n" +
             "When raycast is off use mouse button to create walls\n" +
             "Use the scroll wheel to increase or decrease raycast amount");
+        document.cookie = "a";
     }
     createCanvas(windowWidth * .99, windowHeight * .98);
     max_length = Math.sqrt(width * width + height * height);
