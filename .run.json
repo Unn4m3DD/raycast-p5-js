@@ -1,4 +1,6 @@
 {
   "setup": "",
-  "run": "&& serve -s . -l $PORT"
+  "run": "&& serve -s . -l $PORT",
+  "title": "Raycast demo",
+  "subtitle": "Raycast using p5.js"
 }
