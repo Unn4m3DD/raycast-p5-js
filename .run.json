@@ -2,5 +2,6 @@
   "setup": "",
   "run": "&& serve -s . -l $PORT",
   "title": "Raycast demo",
-  "subtitle": "Raycast using p5.js"
+  "subtitle": "Raycast using p5.js",
+  "image": "https://raw.githubusercontent.com/Unn4m3DD/raycast-p5-js/master/demo.png"
 }
